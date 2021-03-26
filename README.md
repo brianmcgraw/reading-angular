@@ -1,3 +1,6 @@
+I am trying to compile the angular source and create a local project linked to the compiled source, so
+that I am able to make small changes to the code to help learn / walk through it.
+
 node -v
 // v12.13.1
 
@@ -9,9 +12,11 @@ git checkout tags/12.0.0-next.0
 git switch -c building-angular
 
 Open /packages/common/http/src/request.ts, add the following to line 171
+console.log("Test custom angular build - HTTP request")
+
 
 Per https://github.com/angular/angular/blob/master/CONTRIBUTING.md :
-console.log("Test custom angular build - HTTP request")
+
 yarn install
 node ./scripts/build/build-packages-dist.js
 ... wait 20 minutes, apologize to computer ...
