@@ -1,27 +1,46 @@
-# TestCustomAngular
+node -v
+// v12.13.1
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.0-next.6.
+git clone https://github.com/angular/angular.git
 
-## Development server
+cd angular
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+git checkout tags/12.0.0-next.0
+git switch -c building-angular
 
-## Code scaffolding
+Open /packages/common/http/src/request.ts, add the following to line 171
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Per https://github.com/angular/angular/blob/master/CONTRIBUTING.md :
+console.log("Test custom angular build - HTTP request")
+yarn install
+node ./scripts/build/build-packages-dist.js
+... wait 20 minutes, apologize to computer ...
 
-## Build
+navigate into /dist/packages-dist/
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+run npm pack for each folder used in the other angular project
 
-## Running unit tests
+go up one directory (cd..)
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+ng new test-custom-angular
+--yes routing
+--css
 
-## Running end-to-end tests
+in package.json, replace the dependencies with the new .tgz files:
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+"@angular/animations": "file:../angular/dist/packages-dist/animations/angular-animations-12.0.0-next.0.tgz",
+"@angular/common": "file:../angular/dist/packages-dist/common/angular-common-12.0.0-next.0.with-local-changes.tgz",
+"@angular/compiler": "file:../angular/dist/packages-dist/compiler/angular-compiler-12.0.0-next.0.tgz",
+"@angular/core": "file:../angular/dist/packages-dist/core/angular-core-12.0.0-next.0.tgz",
+"@angular/forms": "file:../angular/dist/packages-dist/forms/angular-forms-12.0.0-next.0.tgz",
+"@angular/platform-browser": "file:../angular/dist/packages-dist/platform-browser/angular-platform-browser-12.0.0-next.0.tgz",
+"@angular/platform-browser-dynamic": "file:../angular/dist/packages-dist/platform-browser-dynamic/angular-platform-browser-dynamic-12.0.0-next.0.tgz",
+"@angular/router": "file:../angular/dist/packages-dist/router/angular-router-12.0.0-next.0.tgz",
 
-## Further help
+npm install
+ng serve
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+ng serve has thrown a wide variety of errors. currently I am seeing:
+
+Compiling @angular/core : es2015 as esm2015
+Error: Error on worker #1: TypeError: Cannot read property 'map' of undefined
